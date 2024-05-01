@@ -1,13 +1,12 @@
 <?php
   session_start();
-  include 'phpScripts/dbConnection.php';
 
     
   if(!isset($_SESSION['user'])){
     header('Location:index.php');
     exit();
   }
-
+  include 'phpScripts/dbConnection.php';
   $conn = openConn();
   $uid = $_SESSION['user'];
   $sql = "SELECT * FROM users WHERE uid = '$uid'";
@@ -18,7 +17,6 @@
   $name = $userData['name'];
   $userType = $userData['userType'];
   closeConn($conn);
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -26,13 +24,17 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Add a student</title>
+    <title>School Management System</title>
     <!-- plugins:css -->
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
     <!-- endinject -->
     <!-- Plugin css for this page -->
-    <!-- End Plugin css for this page -->
+    <link rel="stylesheet" href="assets/vendors/jvectormap/jquery-jvectormap.css">
+    <link rel="stylesheet" href="assets/vendors/flag-icon-css/css/flag-icon.min.css">
+    <link rel="stylesheet" href="assets/vendors/owl-carousel-2/owl.carousel.min.css">
+    <link rel="stylesheet" href="assets/vendors/owl-carousel-2/owl.theme.default.min.css">
+    <!-- End plugin css for this page -->
     <!-- inject:css -->
     <!-- endinject -->
     <!-- Layout styles -->
@@ -45,7 +47,7 @@
       <!-- partial:partials/_sidebar.html -->
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-          <a class="sidebar-brand brand-logo" href="index.html"><img src="assets/images/logo.png" alt="logo" style="border-radius: 50%; vertical-align:middle; height: 50px; width: 50px; border: 3px solid #fff;"/></a>
+        <a class="sidebar-brand brand-logo" href="dashboard.php"><img src="assets/images/logo.png" alt="logo" style="border-radius: 50%; vertical-align:middle; height: 50px; width: 50px; border: 3px solid #fff;"/></a>
           <a class="sidebar-brand brand-logo-mini" href="index.html"><img src="assets/images/logo-mini.svg" alt="logo" /></a>
         </div>
         <ul class="nav">
@@ -58,20 +60,20 @@
                 </div>
                 <div class="profile-name">
                   <h5 class="mb-0 font-weight-normal"><?php echo $name; ?></h5>
-                  <span>Gold Member</span>
+                  <span><?php echo $userType; ?></span>
                 </div>
               </div>
               <a href="#" id="profile-dropdown" data-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
               <div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list" aria-labelledby="profile-dropdown">
                 <a href="#" class="dropdown-item preview-item">
-                  <div class="preview-thumbnail">
+                  <!-- <div class="preview-thumbnail">
                     <div class="preview-icon bg-dark rounded-circle">
                       <i class="mdi mdi-settings text-primary"></i>
                     </div>
-                  </div>
-                  <div class="preview-item-content">
+                  </div> -->
+                  <!-- <div class="preview-item-content">
                     <p class="preview-subject ellipsis mb-1 text-small">Account settings</p>
-                  </div>
+                  </div> -->
                 </a>
                 <div class="dropdown-divider"></div>
                 <a href="#" class="dropdown-item preview-item">
@@ -84,16 +86,16 @@
                     <p class="preview-subject ellipsis mb-1 text-small">Change Password</p>
                   </div>
                 </a>
-                <div class="dropdown-divider"></div>
+                <!-- <div class="dropdown-divider"></div>
                 <a href="#" class="dropdown-item preview-item">
                   <div class="preview-thumbnail">
                     <div class="preview-icon bg-dark rounded-circle">
                       <i class="mdi mdi-calendar-today text-success"></i>
                     </div>
-                  </div>
-                  <div class="preview-item-content">
+                  </div> -->
+                  <!-- <div class="preview-item-content">
                     <p class="preview-subject ellipsis mb-1 text-small">To-do list</p>
-                  </div>
+                  </div> -->
                 </a>
               </div>
             </div>
@@ -125,6 +127,14 @@
               </ul>
             </div>
           </li>
+          <!-- <li class="nav-item menu-items">
+            <a class="nav-link" href="pages/forms/basic_elements.html">
+              <span class="menu-icon">
+                <i class="mdi mdi-playlist-play"></i>
+              </span>
+              <span class="menu-title">Form Elements</span>
+            </a>
+          </li> -->
           <li class="nav-item menu-items">
             <a class="nav-link" href="pages/tables/basic-table.html">
               <span class="menu-icon">
@@ -141,6 +151,14 @@
               <span class="menu-title">Exam Results</span>
             </a>
           </li>
+          <!-- <li class="nav-item menu-items">
+            <a class="nav-link" href="pages/charts/chartjs.html">
+              <span class="menu-icon">
+                <i class="mdi mdi-chart-bar"></i>
+              </span>
+              <span class="menu-title">Charts</span>
+            </a>
+          </li> -->
           <li class="nav-item menu-items">
             <a class="nav-link" href="messages.php">
               <span class="menu-icon">
@@ -150,7 +168,7 @@
             </a>
           </li>
           <li class="nav-item menu-items">
-            <a class="nav-link" href="phpScripts/api/logout.php">
+            <a class="nav-link" href="phpScripts/logout.php">
               <span class="menu-icon">
                 <i class="mdi mdi-contacts"></i>
               </span>
@@ -177,7 +195,6 @@
                 </form>
               </li>
             </ul> -->
-
             <ul class="navbar-nav navbar-nav-right">
               <li class="nav-item dropdown d-none d-lg-block">
                 <!-- <a class="nav-link btn btn-success create-new-button" id="createbuttonDropdown" data-toggle="dropdown" aria-expanded="false" href="#">+ Create New Project</a> -->
@@ -220,11 +237,11 @@
                   <p class="p-3 mb-0 text-center">See all projects</p>
                 </div>
               </li>
-              <li class="nav-item nav-settings d-none d-lg-block">
+              <!-- <li class="nav-item nav-settings d-none d-lg-block">
                 <a class="nav-link" href="#">
                   <i class="mdi mdi-view-grid"></i>
                 </a>
-              </li>
+              </li> -->
               <li class="nav-item dropdown border-left">
                 <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
                   <i class="mdi mdi-email"></i>
@@ -324,14 +341,14 @@
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
                   <h6 class="p-3 mb-0">Profile</h6>
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item preview-item">
+                  <a href="parentProfile.php" class="dropdown-item preview-item">
                     <div class="preview-thumbnail">
                       <div class="preview-icon bg-dark rounded-circle">
                         <i class="mdi mdi-settings text-success"></i>
                       </div>
                     </div>
                     <div class="preview-item-content">
-                      <p class="preview-subject mb-1">Settings</p>
+                      <p class="preview-subject mb-1">Edit Profile</p>
                     </div>
                   </a>
                   <div class="dropdown-divider"></div>
@@ -354,71 +371,36 @@
               <span class="mdi mdi-format-line-spacing"></span>
             </button>
           </div>
-        
         </nav>
         <!-- partial -->
         <div class="main-panel">
-          <!-- Form registration information goes here -->
-    <div class="container-scroller">
-      <div class="container-fluid page-body-wrapper full-page-wrapper">
-        <div class="row w-100 m-0">
-          <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
-            <div class="card col-lg-8 mx-auto">
-              <div class="card-body px-5 py-5">
-                <h3 class="card-title text-left mb-3">Register a student</h3>
-                <form method="POST" action="phpScripts/api/addStudent.php" id="myForm" enctype="multipart/form-data">
-                  <div class="form-group" id="registerForm">
-                    <label>Name</label>
-                    <input type="text" id="name" name="name" class="form-control p_input" required>
-                  </div>
-                  <div class="form-group">
-                    <label>Surname</label>
-                    <input type="text" id="surname" name="surname" class="form-control p_input" required>
-                  </div>
-                  <div class="form-group">
-                    <label>Date of Birth</label>
-                    <input type="date" id="dob" max="2019-12-31" name="dob" class="form-control p_input" required>
-                  </div>
-                  <div class="form-group">
-                    <label>Gender</label>
-                    <select id="gender" name="gender">
-                      <option value="Male" id="male">Male</option>
-                      <option value="Female" id="female">Female</option>
-                      <option value="Other" id="other">Other</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label>Address</label>
-                    <textarea class="md-textarea form-control" name="address" id="address" rows="3" required></textarea>
-                  </div>
-                  <div class="form-group">
-                    <label>Grade Applying for(i.e 1-7):</label>
-                    <input type="number" id="grade" name="grade" step="1" min="1" max="7" class="form-control p_input" required>
-                  </div>
-                  <div class="form-group">
-                    <label>Upload Recommendation Letter:</label>
-                    <input type="file" accept="file/pdf, file/docx" id="recommendation" name="recommendation" class="form-control p_input" required>
-                  </div>
-                  <div class="form-group">
-                    <label>Profile Pic:</label>
-                    <input type="file" id="profile" accept="image/*" name="profile" class="form-control p_input" required>
-                  </div>
-                  <div class="text-center">
-                    <button type="submit" class="btn btn-primary btn-block enter-btn">Register</button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-          <!-- content-wrapper ends -->
-        </div>
-        <!-- row ends -->
-      </div>
-      <!-- page-body-wrapper ends -->
-    </div>
           <div class="content-wrapper">
+            <div class="row">
+              <div class="col-12 grid-margin stretch-card">
+                <div class="card corona-gradient-card">
+                  <div class="card-body py-0 px-0 px-sm-3">
+                    <div class="row align-items-center">
+                      <div class="col-4 col-sm-3 col-xl-2">
+                        <img src="assets/images/dashboard/Group126@2x.png" class="gradient-corona-img img-fluid" alt="">
+                      </div>
+                      <div class="col-5 col-sm-7 col-xl-8 p-0">
+                        <h4 class="mb-1 mb-sm-0">Do you have any question for the school?</h4>
+                        <p class="mb-0 font-weight-normal d-none d-sm-block"></p>
+                      </div>
+                      <div class="col-3 col-sm-2 col-xl-2 pl-0 text-center">
+                        <span>
+                          <a href="contactUs.php" target="_blank" class="btn btn-outline-light btn-rounded get-started-btn">Contact Us</a>
+                          <i class="mdi mdi-email"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            <br>
+        
           </div>
-    
           <!-- content-wrapper ends -->
           <!-- partial:partials/_footer.html -->
           <footer class="footer">
@@ -437,18 +419,21 @@
     <script src="assets/vendors/js/vendor.bundle.base.js"></script>
     <!-- endinject -->
     <!-- Plugin js for this page -->
+    <script src="assets/vendors/chart.js/Chart.min.js"></script>
+    <script src="assets/vendors/progressbar.js/progressbar.min.js"></script>
+    <script src="assets/vendors/jvectormap/jquery-jvectormap.min.js"></script>
+    <script src="assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+    <script src="assets/vendors/owl-carousel-2/owl.carousel.min.js"></script>
     <!-- End plugin js for this page -->
     <!-- inject:js -->
     <script src="assets/js/off-canvas.js"></script>
     <script src="assets/js/hoverable-collapse.js"></script>
     <script src="assets/js/misc.js"></script>
     <script src="assets/js/settings.js"></script>
-    <script>
-      var dob = document.getElementById('dob');
-
-    </script>
+    <script src="assets/js/todolist.js"></script>
     <!-- endinject -->
     <!-- Custom js for this page -->
+    <script src="assets/js/dashboard.js"></script>
     <!-- End custom js for this page -->
   </body>
 </html>
